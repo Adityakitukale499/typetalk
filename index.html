@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TypeTalk — Typing, Listening &amp; Speaking Practice</title>
+  <meta name="description" content="Practice typing, dictation, reading aloud and shadowing with live stats, levels and badges. Free, offline-ready, no account needed.">
+  <meta name="theme-color" content="#3b6cf6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta name="application-name" content="TypeTalk">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TypeTalk">
+
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/keyboard.css">
+  <link rel="stylesheet" href="css/typing.css">
+  <link rel="stylesheet" href="css/dictation.css">
+  <link rel="stylesheet" href="css/speaking.css">
+  <link rel="stylesheet" href="css/shadowing.css">
+  <link rel="stylesheet" href="css/results.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <script>
+    // Apply saved theme before first paint to avoid a flash (mirrors app.js logic).
+    (function () {
+      try {
+        var raw = localStorage.getItem('typetalk:settings');
+        var s = raw ? JSON.parse(raw) : null;
+        var theme = (s && s.theme) || 'auto';
+        if (theme === 'auto') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+        if (s && s.reduceMotion) { document.documentElement.dataset.reduceMotion = 'true'; }
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to content</a>
+
+  <header id="topbar" class="topbar" role="banner"></header>
+
+  <main id="app" class="app" tabindex="-1" aria-live="polite">
+    <div class="page-loading"><div class="spinner" role="status" aria-label="Loading"></div></div>
+  </main>
+
+  <div id="drawer-overlay" class="drawer-overlay" hidden></div>
+  <aside id="settings-drawer" class="settings-drawer" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-hidden="true" hidden></aside>
+
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="false"></div>
+  <div id="modal-root" class="modal-root"></div>
+
+  <noscript>
+    <div class="noscript">
+      <h1>TypeTalk needs JavaScript</h1>
+      <p>This app runs entirely in your browser and requires JavaScript to be enabled. Please enable it and reload the page.</p>
+    </div>
+  </noscript>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

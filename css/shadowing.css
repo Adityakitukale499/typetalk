@@ -1,0 +1,629 @@
+/* ==========================================================================
+   TypeTalk — Listen & Repeat (shadowing) mode
+   Relies on design tokens + shared components from css/styles.css.
+   ========================================================================== */
+
+.shadowing-page {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.shadowing-header {
+  max-width: 760px;
+  margin: 0 auto 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.shadowing-toolbar {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.shadowing-speed {
+  align-items: center;
+}
+
+.shadowing-speed .range {
+  width: 140px;
+}
+
+.shadowing-field-label {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.shadowing-rate-value {
+  font-variant-numeric: tabular-nums;
+  min-width: 2.6em;
+  font-size: 0.85rem;
+}
+
+/* Voice settings (collapsible) --------------------------------------------- */
+
+.shadowing-voice-settings {
+  position: relative;
+}
+
+.shadowing-voice-settings > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.shadowing-voice-settings > summary::-webkit-details-marker {
+  display: none;
+}
+
+.shadowing-voice-settings > summary svg {
+  width: 18px;
+  height: 18px;
+}
+
+.shadowing-voice-panel {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 260px;
+}
+
+.shadowing-voice-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shadowing-voice-row .shadowing-field-label {
+  min-width: 52px;
+}
+
+.shadowing-accents .chip {
+  font-size: 0.85rem;
+}
+
+.shadowing-voice {
+  flex: 1 1 180px;
+  max-width: 320px;
+}
+
+/* Card --------------------------------------------------------------------- */
+
+.shadowing-card {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  padding: 28px 24px;
+}
+
+.shadowing-progress-row {
+  width: 100%;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.shadowing-progress-text {
+  font-variant-numeric: tabular-nums;
+}
+
+.shadowing-hint {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.shadowing-card .progress {
+  width: 100%;
+}
+
+.shadowing-status {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  min-height: 1.5em;
+}
+
+.shadowing-card[data-state="listening"] .shadowing-status {
+  color: var(--error);
+}
+
+.shadowing-card[data-state="playing"] .shadowing-status {
+  color: var(--primary);
+}
+
+/* Hidden sentence placeholder ---------------------------------------------- */
+
+.shadowing-sentence {
+  width: 100%;
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  font-size: 1.35rem;
+  line-height: 1.6;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.shadowing-sentence:not(.is-hidden) {
+  border-style: solid;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.shadowing-skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 10px;
+  max-width: 560px;
+}
+
+.shadowing-skeleton-word {
+  display: inline-block;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--border) 0%, var(--surface) 50%, var(--border) 100%);
+  background-size: 200% 100%;
+  animation: shadowing-shimmer 1.6s ease-in-out infinite;
+  opacity: 0.9;
+}
+
+@keyframes shadowing-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Waveform ----------------------------------------------------------------- */
+
+.wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.wave.is-active {
+  opacity: 1;
+}
+
+.wave > span {
+  display: block;
+  width: 6px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--primary);
+  transform-origin: center;
+}
+
+.wave.is-active > span {
+  animation: shadowing-wave 1s ease-in-out infinite;
+}
+
+.wave.is-active > span:nth-child(1) { animation-delay: 0ms; }
+.wave.is-active > span:nth-child(2) { animation-delay: 120ms; }
+.wave.is-active > span:nth-child(3) { animation-delay: 240ms; }
+.wave.is-active > span:nth-child(4) { animation-delay: 360ms; }
+.wave.is-active > span:nth-child(5) { animation-delay: 480ms; }
+
+@keyframes shadowing-wave {
+  0%, 100% { height: 10px; opacity: 0.6; }
+  50% { height: 40px; opacity: 1; }
+}
+
+/* Mic button --------------------------------------------------------------- */
+
+.shadowing-mic-wrap {
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shadowing-mic {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  box-shadow: var(--shadow);
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+  font: inherit;
+}
+
+.shadowing-mic svg {
+  width: 36px;
+  height: 36px;
+}
+
+.shadowing-mic:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.shadowing-mic:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.shadowing-mic:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.shadowing-mic:focus-visible,
+.shadowing-voice-settings > summary:focus-visible {
+  outline: 3px solid var(--primary-soft);
+  outline-offset: 2px;
+}
+
+.shadowing-mic.is-listening {
+  background: var(--error);
+  color: #ffffff;
+}
+
+.shadowing-mic.is-listening:hover:not(:disabled) {
+  background: var(--error);
+  filter: brightness(0.95);
+}
+
+.shadowing-mic.is-listening::before,
+.shadowing-mic.is-listening::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 3px solid var(--error);
+  opacity: 0;
+  pointer-events: none;
+  animation: shadowing-pulse 1.6s ease-out infinite;
+}
+
+.shadowing-mic.is-listening::after {
+  animation-delay: 0.8s;
+}
+
+@keyframes shadowing-pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
+
+.shadowing-mic-label {
+  font-size: 0.85rem;
+  min-height: 1.2em;
+}
+
+.shadowing-card[data-state="ready"] .shadowing-mic-label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Controls ----------------------------------------------------------------- */
+
+.shadowing-controls {
+  flex-wrap: wrap;
+  min-height: 44px;
+}
+
+.shadowing-controls .btn svg,
+.shadowing-replay svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: -3px;
+  margin-right: 4px;
+}
+
+.shadowing-controls .btn-primary svg:last-child {
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+/* Review diff -------------------------------------------------------------- */
+
+.shadowing-review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.shadowing-review-meta {
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.shadowing-heard {
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.shadowing-diff {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.9;
+  word-break: break-word;
+}
+
+.shadowing-diff .w {
+  display: inline-block;
+  position: relative;
+  padding: 0 3px;
+  border-radius: 6px;
+  vertical-align: top;
+}
+
+.shadowing-diff .w-ok {
+  color: var(--success);
+}
+
+.shadowing-diff .w-missed {
+  color: var(--error);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  background: var(--error-soft);
+}
+
+.shadowing-diff .w-wrong {
+  color: var(--error);
+  background: var(--error-soft);
+  text-decoration: underline wavy;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  margin-bottom: 1.1em;
+}
+
+.shadowing-diff .w-heard {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  font-size: 0.6em;
+  line-height: 1.2;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-decoration: none;
+  font-style: italic;
+  margin-top: 1px;
+}
+
+/* Results: sentence list --------------------------------------------------- */
+
+.shadowing-results {
+  text-align: left;
+}
+
+.shadowing-results-title {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+}
+
+.shadowing-sentence-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  counter-reset: shadowing-sentence;
+}
+
+.shadowing-sentence-item {
+  counter-increment: shadowing-sentence;
+  position: relative;
+  padding: 12px 14px 12px 44px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.shadowing-sentence-item::before {
+  content: counter(shadowing-sentence);
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shadowing-sentence-item .shadowing-diff {
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.shadowing-sentence-meta {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+}
+
+/* Loading / unsupported ---------------------------------------------------- */
+
+.shadowing-loading {
+  min-height: 220px;
+  justify-content: center;
+}
+
+.shadowing-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid var(--primary-soft);
+  border-top-color: var(--primary);
+  animation: shadowing-spin 0.9s linear infinite;
+}
+
+@keyframes shadowing-spin {
+  to { transform: rotate(360deg); }
+}
+
+.shadowing-unsupported {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.shadowing-unsupported .page-title {
+  margin-top: 0;
+}
+
+.shadowing-unsupported .btn svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: -3px;
+  margin-right: 4px;
+}
+
+/* Dark theme tweaks -------------------------------------------------------- */
+
+html[data-theme="dark"] .shadowing-skeleton-word {
+  background: linear-gradient(90deg, var(--border) 0%, var(--surface-2) 50%, var(--border) 100%);
+  background-size: 200% 100%;
+}
+
+html[data-theme="dark"] .shadowing-mic:focus-visible {
+  outline-color: var(--primary);
+}
+
+/* Responsive --------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .shadowing-card {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .shadowing-sentence,
+  .shadowing-diff {
+    font-size: 1.15rem;
+  }
+
+  .shadowing-hint {
+    display: none;
+  }
+
+  .shadowing-speed .range {
+    width: 110px;
+  }
+
+  .shadowing-toolbar {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .shadowing-voice-panel {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .shadowing-voice-settings {
+    width: 100%;
+  }
+
+  .shadowing-mic {
+    width: 76px;
+    height: 76px;
+  }
+
+  .shadowing-mic svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 400px) {
+  .shadowing-controls .btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* Reduced motion ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .shadowing-skeleton-word,
+  .wave.is-active > span,
+  .shadowing-mic.is-listening::before,
+  .shadowing-mic.is-listening::after,
+  .shadowing-spinner {
+    animation: none;
+  }
+
+  .wave.is-active > span {
+    height: 24px;
+    opacity: 1;
+  }
+
+  .shadowing-mic.is-listening::before {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+
+  .shadowing-mic.is-listening::after {
+    display: none;
+  }
+
+  .shadowing-mic,
+  .shadowing-sentence,
+  .wave {
+    transition: none;
+  }
+}
+
+html[data-reduce-motion="true"] .shadowing-skeleton-word,
+html[data-reduce-motion="true"] .wave.is-active > span,
+html[data-reduce-motion="true"] .shadowing-mic.is-listening::before,
+html[data-reduce-motion="true"] .shadowing-mic.is-listening::after,
+html[data-reduce-motion="true"] .shadowing-spinner {
+  animation: none;
+}
+
+html[data-reduce-motion="true"] .wave.is-active > span {
+  height: 24px;
+  opacity: 1;
+}
+
+html[data-reduce-motion="true"] .shadowing-mic.is-listening::before {
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+html[data-reduce-motion="true"] .shadowing-mic.is-listening::after {
+  display: none;
+}
+
+html[data-reduce-motion="true"] .shadowing-mic,
+html[data-reduce-motion="true"] .shadowing-sentence,
+html[data-reduce-motion="true"] .wave {
+  transition: none;
+}

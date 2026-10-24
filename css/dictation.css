@@ -1,0 +1,511 @@
+/* ==========================================================================
+   TypeTalk — Listen & Type (dictation) mode
+   Depends on design tokens + shared components from css/styles.css
+   ========================================================================== */
+
+.dictation-page {
+  padding-top: 16px;
+  padding-bottom: 40px;
+}
+
+/* --- header ----------------------------------------------------------- */
+.dictation-header {
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.dictation-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dictation-title .page-title {
+  margin: 0;
+}
+
+.dictation-title .mode-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.dictation-header-controls {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+.dictation-header-controls .btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- card ------------------------------------------------------------- */
+.dictation-card {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- progress --------------------------------------------------------- */
+.dict-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dict-progress-text {
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dict-progress-caption {
+  font-size: 0.85rem;
+}
+
+.dict-progress .progress > .bar {
+  transition: width 0.25s ease;
+}
+
+/* --- play stage ------------------------------------------------------- */
+.dict-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 4px;
+}
+
+.dict-play {
+  --dict-glow: rgba(59, 108, 246, 0.45);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: none;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(59, 108, 246, 0.3);
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.dict-play svg {
+  width: 40px;
+  height: 40px;
+  stroke-width: 2;
+}
+
+.dict-play:hover {
+  transform: scale(1.06);
+  background: var(--primary-hover);
+}
+
+.dict-play:active {
+  transform: scale(0.97);
+}
+
+.dict-play:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--surface), 0 0 0 7px var(--primary), 0 10px 24px rgba(59, 108, 246, 0.3);
+}
+
+.dict-play[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
+}
+
+.dict-play.is-speaking {
+  animation: dict-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes dict-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--dict-glow), 0 10px 24px rgba(59, 108, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(59, 108, 246, 0), 0 10px 24px rgba(59, 108, 246, 0.3);
+  }
+}
+
+.dict-play-caption {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.dict-replays {
+  font-size: 0.85rem;
+  min-height: 1.3em;
+  font-variant-numeric: tabular-nums;
+}
+
+.dict-reveal {
+  margin: 6px 0 0;
+  max-width: 620px;
+  text-align: center;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--warning-soft);
+  color: var(--text-muted);
+}
+
+/* --- start panel ------------------------------------------------------ */
+.dict-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  padding: 6px 0 2px;
+}
+
+.dict-start-text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+/* --- accent chips ----------------------------------------------------- */
+.dict-accent-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: -8px;
+}
+
+.dict-accent-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+
+.dict-accent-chips {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dict-accent-chips .chip {
+  font-size: 0.85rem;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+
+.dict-controls .select optgroup {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.dict-controls .select option {
+  color: var(--text);
+  font-weight: 400;
+}
+
+/* --- controls --------------------------------------------------------- */
+.dict-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px 18px;
+  align-items: end;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.dict-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dict-control .range,
+.dict-control .select {
+  width: 100%;
+}
+
+.dict-control-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.dict-control-value {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.dict-control-btn {
+  justify-content: flex-end;
+}
+
+.dict-reveal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.dict-reveal-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dict-reveal-btn[aria-pressed="true"] {
+  border-color: var(--warning);
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+/* --- input ------------------------------------------------------------ */
+.dict-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dict-input {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 14px 18px;
+  line-height: 1.4;
+}
+
+/* --- feedback --------------------------------------------------------- */
+.dict-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  animation: dict-fade 0.2s ease;
+}
+
+@keyframes dict-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dict-feedback-title {
+  font-weight: 600;
+}
+
+.dict-feedback-hint {
+  font-size: 0.8rem;
+}
+
+.dict-diff {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.dict-diff > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  border-radius: 4px;
+}
+
+.w-ok {
+  color: var(--success);
+}
+
+.w-wrong {
+  color: var(--error);
+  background: var(--error-soft);
+  padding: 0 4px;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--error);
+  text-underline-offset: 3px;
+}
+
+.w-missed {
+  color: var(--error);
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.w-heard {
+  font-size: 0.78em;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.dict-typed {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.dict-typed b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* --- hints ------------------------------------------------------------ */
+.dict-hints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  font-size: 0.85rem;
+}
+
+.dict-hints > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --- results summary (extraContent) ----------------------------------- */
+.dictation-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dictation-summary-title h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.dictation-summary-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dictation-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.dictation-summary-item .dict-diff {
+  font-size: 1rem;
+}
+
+.dictation-summary-head {
+  font-size: 0.85rem;
+}
+
+/* --- dark theme tweaks ------------------------------------------------ */
+html[data-theme="dark"] .dict-play {
+  --dict-glow: rgba(59, 108, 246, 0.55);
+  box-shadow: 0 10px 28px rgba(59, 108, 246, 0.35);
+}
+
+html[data-theme="dark"] .dict-reveal {
+  color: var(--text);
+}
+
+/* --- responsive ------------------------------------------------------- */
+@media (max-width: 640px) {
+  .dictation-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dict-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .dict-play {
+    width: 84px;
+    height: 84px;
+  }
+
+  .dict-play svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .dict-input {
+    font-size: 1.1rem;
+    padding: 12px 14px;
+  }
+
+  .dict-diff {
+    font-size: 1.05rem;
+  }
+}
+
+/* --- reduced motion --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .dict-play,
+  .dict-feedback,
+  .dict-progress .progress > .bar {
+    transition: none;
+    animation: none;
+  }
+
+  .dict-play:hover,
+  .dict-play:active {
+    transform: none;
+  }
+
+  .dict-play.is-speaking {
+    animation: none;
+    box-shadow: 0 0 0 8px var(--primary-soft), 0 10px 24px rgba(59, 108, 246, 0.3);
+  }
+}
+
+html[data-reduce-motion="true"] .dict-play,
+html[data-reduce-motion="true"] .dict-feedback,
+html[data-reduce-motion="true"] .dict-progress .progress > .bar {
+  transition: none;
+  animation: none;
+}
+
+html[data-reduce-motion="true"] .dict-play:hover,
+html[data-reduce-motion="true"] .dict-play:active {
+  transform: none;
+}
+
+html[data-reduce-motion="true"] .dict-play.is-speaking {
+  animation: none;
+  box-shadow: 0 0 0 8px var(--primary-soft), 0 10px 24px rgba(59, 108, 246, 0.3);
+}

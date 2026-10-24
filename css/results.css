@@ -1,0 +1,365 @@
+/* TypeTalk — results screen (js/results.js) */
+
+.results-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+/* ---------- Header ---------- */
+.results-header {
+  animation: results-fade-up 0.45s ease both;
+}
+
+.results-title {
+  margin: 0 0 6px;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.results-subtitle {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* ---------- Stars ---------- */
+.results-stars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.results-stars .star {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  color: var(--border);
+  transform: scale(0);
+  opacity: 0;
+  animation: results-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.results-stars .star svg {
+  width: 40px;
+  height: 40px;
+  fill: var(--border);
+  stroke: var(--border);
+}
+
+.results-stars .star.filled {
+  color: var(--warning);
+}
+
+.results-stars .star.filled svg {
+  fill: var(--warning);
+  stroke: var(--warning);
+  filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.35));
+}
+
+/* ---------- Stat tiles ---------- */
+.results-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.results-tile {
+  animation: results-fade-up 0.45s ease both;
+}
+
+.results-tile:nth-child(1) { animation-delay: 0.15s; }
+.results-tile:nth-child(2) { animation-delay: 0.25s; }
+.results-tile:nth-child(3) { animation-delay: 0.35s; }
+.results-tile:nth-child(4) { animation-delay: 0.45s; }
+
+.results-tile .value {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-tile.tile-wpm .value {
+  color: var(--primary);
+}
+
+.results-tile.tile-errors .value {
+  color: var(--error);
+}
+
+/* ---------- Flags (PB / revealed) ---------- */
+.results-flags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  animation: results-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s both;
+}
+
+.results-pb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  padding: 6px 14px;
+}
+
+.results-pb-icon,
+.results-xp-icon,
+.results-levelup-icon,
+.results-btn-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.results-pb-icon svg,
+.results-xp-icon svg,
+.results-levelup-icon svg,
+.results-btn-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* ---------- XP card ---------- */
+.results-xp {
+  text-align: left;
+  animation: results-fade-up 0.45s ease 0.5s both;
+}
+
+.results-xp-head {
+  margin-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.results-xp-gain {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary);
+}
+
+.results-xp-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.results-level-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.results-level-bar {
+  height: 12px;
+}
+
+.results-level-bar > .bar {
+  transition: width 900ms ease;
+}
+
+.results-xp-foot {
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+.results-levelup {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--primary-contrast);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: var(--shadow);
+  animation: results-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both;
+}
+
+/* ---------- Section cards ---------- */
+.results-section {
+  text-align: left;
+  animation: results-fade-up 0.45s ease 0.6s both;
+}
+
+.results-section-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ---------- Badges ---------- */
+.results-badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.results-badge-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  animation: results-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.results-badge-emoji {
+  font-size: 32px;
+  line-height: 1;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--warning-soft);
+  flex-shrink: 0;
+}
+
+.results-badge-name {
+  font-weight: 700;
+}
+
+.results-badge-desc {
+  font-size: 0.85rem;
+}
+
+/* ---------- Trend chart ---------- */
+.results-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.results-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.results-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.results-chart {
+  width: 100%;
+}
+
+.results-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- Keys to practice ---------- */
+.results-keys-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.results-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.results-key .kbd {
+  font-size: 1rem;
+  min-width: 36px;
+  text-align: center;
+}
+
+.results-key-count {
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Actions ---------- */
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  animation: results-fade-up 0.45s ease 0.7s both;
+}
+
+.results-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.results-hints {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 0.85rem;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes results-pop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes results-fade-up {
+  from { transform: translateY(14px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .results-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .results-tile .value {
+    font-size: 2rem;
+  }
+
+  .results-actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .results-wrap,
+  .results-wrap * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+html[data-reduce-motion="true"] .results-wrap,
+html[data-reduce-motion="true"] .results-wrap * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}

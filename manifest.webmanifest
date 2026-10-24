@@ -1,0 +1,52 @@
+{
+  "name": "TypeTalk - Typing, Listening & Speaking Practice",
+  "short_name": "TypeTalk",
+  "description": "Free, offline-friendly practice app for typing speed, dictation (listen & type), reading aloud and shadowing. Four difficulty levels, milestones, badges and detailed stats - all stored on your device.",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3f6fb",
+  "theme_color": "#3b6cf6",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "1 Minute Typing Test",
+      "short_name": "Typing",
+      "description": "Start a one minute See & Type test",
+      "url": "./#/typing?duration=60",
+      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Dictation",
+      "short_name": "Dictation",
+      "description": "Listen & Type practice",
+      "url": "./#/dictation",
+      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "See your stats, streak and badges",
+      "url": "./#/dashboard",
+      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}

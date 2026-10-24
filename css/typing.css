@@ -1,0 +1,482 @@
+/* ==========================================================================
+   TypeTalk — See & Type mode (js/modes/typing.js)
+   Uses design tokens from css/styles.css. Light & dark via tokens only.
+   ========================================================================== */
+
+.typing-mode {
+  padding-top: 20px;
+  padding-bottom: 32px;
+}
+
+/* ---- Header ------------------------------------------------------------- */
+
+.typing-header {
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.typing-header .page-title {
+  margin: 0;
+}
+
+.typing-header .page-subtitle {
+  margin: 4px 0 0;
+}
+
+.typing-new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.typing-btn-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+}
+
+.typing-btn-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---- Controls (chip pickers) ------------------------------------------- */
+
+.typing-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-bottom: 16px;
+}
+
+.typing-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.typing-control-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  min-width: 64px;
+}
+
+/* ---- Live stats --------------------------------------------------------- */
+
+.typing-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.typing-stats .stat-pill .value {
+  font-variant-numeric: tabular-nums;
+  min-width: 2.2ch;
+  text-align: center;
+}
+
+/* ---- Card --------------------------------------------------------------- */
+
+.typing-card {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  outline: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.typing-card:focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft), var(--shadow);
+}
+
+.typing-progress {
+  height: 4px;
+  border-radius: 0;
+  margin: 0;
+  background: var(--surface-2);
+}
+
+.typing-progress > .bar {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.15s ease-out;
+}
+
+.typing-body {
+  position: relative;
+  padding: 28px 32px 22px;
+  min-height: 200px;
+  cursor: text;
+}
+
+/* 3-line viewport; the inner text slides with translateY from JS. */
+.typing-viewport {
+  position: relative;
+  overflow: hidden;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  line-height: 1.9;
+  max-height: calc(3 * 1.9em);
+}
+
+.typing-text {
+  position: relative;
+  font-family: var(--font);
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: 0.01em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.typing-card.kind-numbers .typing-text {
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.typing-card.is-loading .typing-viewport,
+.typing-card.is-loading .typing-footer .typing-source {
+  visibility: hidden;
+}
+
+/* ---- Characters --------------------------------------------------------- */
+
+.ch {
+  position: relative;
+  display: inline;
+  border-radius: 3px;
+  transition: color 0.1s ease, background-color 0.1s ease;
+}
+
+.ch.pending {
+  color: var(--text-muted);
+}
+
+.ch.correct {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--success-soft);
+}
+
+.ch.wrong {
+  color: var(--error);
+  background: var(--error-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--error);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+/* Wrong spaces must stay visible: solid tinted block with error underline. */
+.ch.space.wrong {
+  background: var(--error-soft);
+  box-shadow: inset 0 -2px 0 var(--error);
+  text-decoration: none;
+}
+
+.ch.newline {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.ch.current {
+  color: var(--text);
+  background: var(--primary-soft);
+}
+
+.ch.current.wrong {
+  color: var(--error);
+  background: var(--error-soft);
+}
+
+/* Caret: animated bar at the left edge of the current character. */
+.ch.current::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 50%;
+  width: 2px;
+  height: 1.25em;
+  transform: translateY(-50%);
+  border-radius: 1px;
+  background: var(--primary);
+  animation: typing-caret-blink 1s steps(1, end) infinite;
+  pointer-events: none;
+}
+
+.ch.current.wrong::before {
+  background: var(--error);
+}
+
+/* Slower blink while the timer is running: easier to track. */
+.typing-text.is-active .ch.current::before {
+  animation-duration: 1.4s;
+}
+
+@keyframes typing-caret-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+
+/* ---- Focus overlay ------------------------------------------------------ */
+
+.typing-focus {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  z-index: 2;
+  animation: typing-fade-in 0.18s ease-out;
+}
+
+html[data-theme="dark"] .typing-focus {
+  background: rgba(23, 29, 43, 0.6);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+}
+
+.typing-card.is-unfocused .typing-focus {
+  display: flex;
+}
+
+.typing-focus-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  color: var(--primary);
+}
+
+.typing-focus-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.typing-focus-text {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+@keyframes typing-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---- Loading ------------------------------------------------------------ */
+
+.typing-loading {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  z-index: 3;
+}
+
+.typing-card.is-loading .typing-loading {
+  display: flex;
+}
+
+.typing-spinner {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-soft);
+  border-top-color: var(--primary);
+  animation: typing-spin 0.8s linear infinite;
+}
+
+@keyframes typing-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Footer: source + hints -------------------------------------------- */
+
+.typing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 12px 32px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 0.82rem;
+}
+
+.typing-source {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.typing-hints {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.typing-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.typing-hint-armed {
+  display: none;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.typing-hints.armed .typing-hint-new {
+  display: none;
+}
+
+.typing-hints.armed .typing-hint-armed {
+  display: inline-flex;
+}
+
+/* ---- Keyboard container ------------------------------------------------- */
+
+.typing-keyboard {
+  margin-top: 20px;
+}
+
+.typing-hidden-input {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+  outline: none;
+  font-size: 16px; /* prevents iOS zoom on focus */
+}
+
+.typing-keyboard[hidden] {
+  display: none;
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .typing-body {
+    padding: 22px 20px 18px;
+  }
+
+  .typing-footer {
+    padding: 10px 20px 14px;
+  }
+
+  .typing-control-label {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .typing-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .typing-new-btn {
+    align-self: flex-start;
+  }
+
+  .typing-viewport {
+    font-size: clamp(1.1rem, 4.4vw, 1.35rem);
+    line-height: 1.8;
+    max-height: calc(3 * 1.8em);
+  }
+
+  .typing-body {
+    padding: 18px 16px 14px;
+    min-height: 160px;
+  }
+
+  .typing-footer {
+    padding: 10px 16px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .typing-stats {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .typing-hints {
+    gap: 4px 10px;
+  }
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ch.current::before,
+  .typing-text.is-active .ch.current::before {
+    animation: none;
+  }
+
+  .typing-text,
+  .typing-progress > .bar,
+  .ch {
+    transition: none;
+  }
+
+  .typing-focus {
+    animation: none;
+  }
+}
+
+html[data-reduce-motion="true"] .ch.current::before,
+html[data-reduce-motion="true"] .typing-text.is-active .ch.current::before,
+html[data-reduce-motion="true"] .typing-focus {
+  animation: none;
+}
+
+html[data-reduce-motion="true"] .typing-text,
+html[data-reduce-motion="true"] .typing-progress > .bar,
+html[data-reduce-motion="true"] .ch {
+  transition: none;
+}

@@ -1,0 +1,663 @@
+/* TypeTalk - dashboard.css
+   Layout and components for the "Your Progress" dashboard (js/modes/dashboard.js)
+   plus small presentational hooks for charts.js output. Uses design tokens from styles.css,
+   so the dark theme works without overrides. */
+
+/* ---------------------------------------------------------------- page */
+
+.dashboard-page {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.dash-header {
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.dash-header .page-subtitle {
+  margin-top: 4px;
+}
+
+.dash-empty-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.dash-empty-banner .btn {
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------- grid */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.dashboard .span-2 {
+  grid-column: 1 / -1;
+}
+
+.dash-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------ headings */
+
+.dash-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dash-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dash-card-title h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dash-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.dash-card-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dash-card-note {
+  font-size: 0.85rem;
+}
+
+.chart-title {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ------------------------------------------------------------ level card */
+
+.level-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ring-wrap {
+  width: 132px;
+  flex-shrink: 0;
+}
+
+.ring-wrap svg {
+  display: block;
+}
+
+.level-info {
+  flex: 1 1 180px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.level-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.level-xp,
+.level-next {
+  font-size: 0.9rem;
+}
+
+.level-progress {
+  margin: 2px 0;
+}
+
+/* ----------------------------------------------------------- streak card */
+
+.streak-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.streak-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.streak-big {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  line-height: 1;
+}
+
+.streak-flame {
+  color: var(--warning);
+  display: inline-flex;
+  align-self: center;
+}
+
+.streak-flame svg {
+  width: 32px;
+  height: 32px;
+}
+
+.streak-value {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.streak-unit {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.streak-longest {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.streak-longest svg {
+  width: 16px;
+  height: 16px;
+  color: var(--warning);
+}
+
+.streak-stats .badge {
+  align-self: flex-start;
+}
+
+/* ---------------------------------------------------------------- totals */
+
+.totals-grid .stat-tile {
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------- trends */
+
+.trend-filter {
+  flex-wrap: wrap;
+}
+
+.trend-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.trend-chart {
+  min-width: 0;
+}
+
+.chart-box {
+  min-height: 220px;
+  width: 100%;
+  position: relative;
+}
+
+.chart-box .chart-svg {
+  width: 100%;
+  height: auto;
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 0.9rem;
+}
+
+.chart-box .chart-empty {
+  min-height: 200px;
+}
+
+.chart-svg text {
+  user-select: none;
+}
+
+/* -------------------------------------------------------------- heatmap */
+
+.heatmap-box {
+  min-height: 140px;
+}
+
+.heatmap-wrap {
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.heatmap-wrap svg {
+  min-width: 420px;
+}
+
+.heatmap-wrap rect[data-level] {
+  transition: opacity 150ms ease;
+}
+
+.heatmap-wrap rect[data-level]:hover {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.heatmap-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.heatmap-box .chart-empty {
+  margin-top: 12px;
+  min-height: 64px;
+  padding: 12px;
+}
+
+/* ------------------------------------------------------------ mode badge */
+
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.mode-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mode-badge.mode-dictation {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.mode-badge.mode-speaking {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.mode-badge.mode-shadowing {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+/* -------------------------------------------------------- personal bests */
+
+.bests-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bests-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bests-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.bests-values {
+  display: flex;
+  gap: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bests-stat strong {
+  font-size: 1.1rem;
+}
+
+/* ------------------------------------------------------------ weak keys */
+
+.weak-keys-body {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(200px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.weak-keyboard {
+  min-width: 0;
+}
+
+.weak-keys-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weak-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.weak-key-row .kbd {
+  min-width: 32px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.weak-key-count {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.weak-keys-empty {
+  margin: 0;
+}
+
+/* --------------------------------------------------------------- badges */
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.badge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 16px 12px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.badge-card.unlocked {
+  border-color: var(--primary-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge-card.unlocked:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.badge-card.locked {
+  opacity: 0.6;
+}
+
+.badge-card.locked .badge-icon {
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+.badge-icon {
+  font-size: 2rem;
+  line-height: 1;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.badge-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.badge-desc {
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.badge-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.badge-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.badge-unlocked {
+  color: var(--success);
+}
+
+.badge-progress {
+  width: 100%;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badge-progress .progress {
+  height: 6px;
+}
+
+.badge-progress-text {
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.badges-summary {
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------- history */
+
+.history-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.history-table th,
+.history-table td {
+  padding: 10px 14px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.history-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.history-table th.num,
+.history-table td.num {
+  text-align: right;
+}
+
+.history-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+}
+
+.history-table tbody tr:hover {
+  background: var(--primary-soft);
+}
+
+.history-time {
+  font-size: 0.8rem;
+}
+
+/* ----------------------------------------------------------------- data */
+
+.data-note {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.data-actions .btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* --------------------------------------------------------------- motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-card,
+  .heatmap-wrap rect[data-level] {
+    transition: none;
+  }
+}
+
+html[data-reduce-motion="true"] .badge-card,
+html[data-reduce-motion="true"] .heatmap-wrap rect[data-level] {
+  transition: none;
+}
+
+/* ----------------------------------------------------------- responsive */
+
+@media (max-width: 800px) {
+  .dashboard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .trend-charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .weak-keys-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dash-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  /* keyboard.css hides .vkeyboard under 700px; collapse its wrapper too */
+  .weak-keyboard {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-page {
+    padding-top: 16px;
+  }
+
+  .level-body,
+  .streak-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .streak-body .ring-wrap,
+  .level-body .ring-wrap {
+    align-self: center;
+  }
+
+  .badge-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+
+  .bests-values {
+    gap: 12px;
+  }
+}
